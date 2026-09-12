@@ -53,4 +53,7 @@ class PDFExtractor(BaseExtractor):
             units.append(unit)
 
         doc.close()
+        del doc
+        import gc
+        gc.collect()
         return units

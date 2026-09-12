@@ -77,8 +77,10 @@ class VectorStoreService:
         if not sections:
             raise ValueError(f"Document '{doc['original_filename']}' has no extracted sections to index.")
 
+        total_sections = len(sections)
         # 2. Chunk sections
         chunks: List[DocumentChunk] = chunker.chunk_sections(sections)
+        del sections  # Release section dictionaries immediately
         if not chunks:
             raise ValueError(f"No textual content could be chunked for document '{doc['original_filename']}'.")
 
@@ -86,13 +88,15 @@ class VectorStoreService:
         self.delete_document_vectors(document_id)
 
         # 4. Prepare data for ChromaDB
+        total_chunks = len(chunks)
         ids = [chunk.id for chunk in chunks]
         texts = [chunk.text for chunk in chunks]
         metadatas = [chunk.to_metadata() for chunk in chunks]
+        del chunks  # Release chunk objects immediately
 
-        # 5. Insert into Chroma collection in bounded batches to conserve memory
-        BATCH_SIZE = 32
-        for i in range(0, len(chunks), BATCH_SIZE):
+        # 5. Insert into Chroma collection in bounded batches (6) to conserve memory
+        BATCH_SIZE = 6
+        for i in range(0, total_chunks, BATCH_SIZE):
             batch_ids = ids[i : i + BATCH_SIZE]
             batch_texts = texts[i : i + BATCH_SIZE]
             batch_metas = metadatas[i : i + BATCH_SIZE]
@@ -102,6 +106,9 @@ class VectorStoreService:
                 metadatas=batch_metas,
             )
 
+        del ids
+        del texts
+        del metadatas
         import gc
         gc.collect()
 
@@ -120,7 +127,7 @@ class VectorStoreService:
 
         logger.info(
             "Successfully indexed %d chunks for document '%s' (ID: %s)",
-            len(chunks),
+            total_chunks,
             doc["original_filename"],
             document_id,
         )
@@ -128,8 +135,8 @@ class VectorStoreService:
         return {
             "document_id": document_id,
             "original_filename": doc["original_filename"],
-            "total_sections": len(sections),
-            "total_chunks_indexed": len(chunks),
+            "total_sections": total_sections,
+            "total_chunks_indexed": total_chunks,
             "status": "indexed",
             "total_vectors_in_store": self.collection.count(),
         }

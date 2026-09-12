@@ -9,6 +9,7 @@ os.environ.setdefault("OMP_NUM_THREADS", "1")
 os.environ.setdefault("ONNXRUNTIME_NUM_THREADS", "1")
 os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
 
+import numpy as np
 from chromadb.api.types import DefaultEmbeddingFunction, Documents, Embeddings
 from chromadb.utils.embedding_functions.onnx_mini_lm_l6_v2 import ONNXMiniLM_L6_V2
 from app.config import EMBEDDING_MODEL_NAME
@@ -19,8 +20,9 @@ logger = logging.getLogger("retrieval.embedding")
 class SafeONNXMiniLM(ONNXMiniLM_L6_V2):
     """
     Memory-optimized, single-instance ONNX MiniLM L6 V2 implementation.
-    Limits thread pools, disables arena pre-allocation, and permanently caches
-    the InferenceSession and Tokenizer singletons to avoid repeated re-instantiations.
+    Limits thread pools, disables arena pre-allocation, permanently caches
+    the InferenceSession and Tokenizer singletons, and enforces bounded batch_size (6)
+    to eliminate large intermediate activation tensor spikes during inference.
     """
     _cached_session: Optional[Any] = None
     _cached_tokenizer: Optional[Any] = None
@@ -49,6 +51,12 @@ class SafeONNXMiniLM(ONNXMiniLM_L6_V2):
                 sess_options=so,
             )
         return SafeONNXMiniLM._cached_session
+
+    def __call__(self, input: Documents) -> Embeddings:
+        """Forward with bounded batch_size=6 to prevent memory spikes in Render containers."""
+        self._download_model_if_not_exists()
+        embeddings = self._forward(input, batch_size=6)
+        return [np.array(e, dtype=np.float32) for e in embeddings]
 
 
 class SafeDefaultEmbeddingFunction(DefaultEmbeddingFunction):

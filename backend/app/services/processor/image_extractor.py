@@ -217,4 +217,14 @@ class ImageExtractor(BaseExtractor):
                     )
                 )
 
+        # Clean up temporary preprocessed image copy to save disk and memory buffers
+        if prep_file != file_path and prep_file.exists():
+            try:
+                prep_file.unlink()
+            except OSError:
+                pass
+
+        import gc
+        gc.collect()
+
         return units

@@ -104,4 +104,8 @@ class PPTXExtractor(BaseExtractor):
             )
             units.append(unit)
 
+        del prs
+        import gc
+        gc.collect()
+
         return units
