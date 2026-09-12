@@ -1,0 +1,9 @@
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+python-multipart>=0.0.18
+pymupdf>=1.25.0
+python-pptx>=1.0.0
+pillow>=11.0.0
+pytesseract>=0.3.10
+chromadb>=1.5.0
+openai>=1.0.0

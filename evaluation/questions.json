@@ -1,0 +1,433 @@
+{
+  "benchmark_metadata": {
+    "title": "The Night Before - Evaluation Benchmark Dataset",
+    "version": "1.0.0",
+    "total_questions": 30,
+    "answerable_count": 20,
+    "single_document_count": 10,
+    "multi_document_count": 10,
+    "not_covered_count": 10,
+    "handwritten_target_count": 2,
+    "multi_turn_conversations_count": 3
+  },
+  "answerable_questions": [
+    {
+      "question_id": "SD-01",
+      "question": "What are the four Coffman conditions for deadlock?",
+      "category": "single_document",
+      "style": "factual",
+      "expected_status": "grounded",
+      "requires_multiple_documents": false,
+      "expected_documents": ["real_os_multipage.pdf"],
+      "expected_pages_or_slides": { "real_os_multipage.pdf": "Page 2" },
+      "must_contain_terms": ["mutual exclusion", "hold and wait", "no preemption", "circular wait"],
+      "is_handwritten_target": false
+    },
+    {
+      "question_id": "SD-02",
+      "question": "How does paging eliminate external fragmentation in physical memory?",
+      "category": "single_document",
+      "style": "how",
+      "expected_status": "grounded",
+      "requires_multiple_documents": false,
+      "expected_documents": ["real_os_multipage.pdf"],
+      "expected_pages_or_slides": { "real_os_multipage.pdf": "Page 3" },
+      "must_contain_terms": ["paging", "fragmentation", "frames"],
+      "is_handwritten_target": false
+    },
+    {
+      "question_id": "SD-03",
+      "question": "What data structure does Breadth-First Search use to visit vertices level by level?",
+      "category": "single_document",
+      "style": "factual",
+      "expected_status": "grounded",
+      "requires_multiple_documents": false,
+      "expected_documents": ["real_graph_slides.pptx"],
+      "expected_pages_or_slides": { "real_graph_slides.pptx": "Slide 2" },
+      "must_contain_terms": ["queue", "fifo"],
+      "is_handwritten_target": false
+    },
+    {
+      "question_id": "SD-04",
+      "question": "Why does Depth-First Search have an O(h) space complexity?",
+      "category": "single_document",
+      "style": "why",
+      "expected_status": "grounded",
+      "requires_multiple_documents": false,
+      "expected_documents": ["real_graph_slides.pptx"],
+      "expected_pages_or_slides": { "real_graph_slides.pptx": "Slide 3" },
+      "must_contain_terms": ["stack", "branch"],
+      "is_handwritten_target": false
+    },
+    {
+      "question_id": "SD-05",
+      "question": "What condition must a database relation satisfy to achieve Second Normal Form 2NF?",
+      "category": "single_document",
+      "style": "conceptual",
+      "expected_status": "grounded",
+      "requires_multiple_documents": false,
+      "expected_documents": ["real_dbms_normalization.md"],
+      "expected_pages_or_slides": { "real_dbms_normalization.md": "Section 3" },
+      "must_contain_terms": ["1nf", "partial functional"],
+      "is_handwritten_target": false
+    },
+    {
+      "question_id": "SD-06",
+      "question": "What is the key requirement for Boyce-Codd Normal Form BCNF regarding determinants?",
+      "category": "single_document",
+      "style": "factual",
+      "expected_status": "grounded",
+      "requires_multiple_documents": false,
+      "expected_documents": ["real_dbms_normalization.md"],
+      "expected_pages_or_slides": { "real_dbms_normalization.md": "Section 4" },
+      "must_contain_terms": ["superkey", "determinant"],
+      "is_handwritten_target": false
+    },
+    {
+      "question_id": "SD-07",
+      "question": "What process states are defined for program execution in the operating system process model?",
+      "category": "single_document",
+      "style": "conceptual",
+      "expected_status": "grounded",
+      "requires_multiple_documents": false,
+      "expected_documents": ["real_os_multipage.pdf"],
+      "expected_pages_or_slides": { "real_os_multipage.pdf": "Page 1" },
+      "must_contain_terms": ["ready", "running", "waiting"],
+      "is_handwritten_target": false
+    },
+    {
+      "question_id": "SD-08",
+      "question": "How does First Normal Form handle repeating groups or arrays in table columns?",
+      "category": "single_document",
+      "style": "paraphrased",
+      "expected_status": "grounded",
+      "requires_multiple_documents": false,
+      "expected_documents": ["real_dbms_normalization.md"],
+      "expected_pages_or_slides": { "real_dbms_normalization.md": "Section 2" },
+      "must_contain_terms": ["atomic", "repeating"],
+      "is_handwritten_target": false
+    },
+    {
+      "question_id": "SD-09",
+      "question": "According to the professor's handwritten notes, what must be known in advance for deadlock avoidance?",
+      "category": "single_document",
+      "style": "factual",
+      "expected_status": "grounded",
+      "requires_multiple_documents": false,
+      "expected_documents": ["real_handwritten_note.png"],
+      "expected_pages_or_slides": { "real_handwritten_note.png": "Page 1" },
+      "must_contain_terms": ["max claim", "advance"],
+      "is_handwritten_target": true
+    },
+    {
+      "question_id": "SD-10",
+      "question": "How does the professor's handwritten note define deadlock prevention using ordering?",
+      "category": "single_document",
+      "style": "how",
+      "expected_status": "grounded",
+      "requires_multiple_documents": false,
+      "expected_documents": ["real_handwritten_note.png"],
+      "expected_pages_or_slides": { "real_handwritten_note.png": "Page 1" },
+      "must_contain_terms": ["circular wait", "order"],
+      "is_handwritten_target": true
+    },
+    {
+      "question_id": "MD-01",
+      "question": "Compare the deadlock prevention approach described in the OS lecture with the specific rule in the professor's handwritten notes.",
+      "category": "multi_document",
+      "style": "comparison",
+      "expected_status": "grounded",
+      "requires_multiple_documents": true,
+      "expected_documents": ["real_os_multipage.pdf", "real_handwritten_note.png"],
+      "expected_pages_or_slides": {
+        "real_os_multipage.pdf": "Page 2",
+        "real_handwritten_note.png": "Page 1"
+      },
+      "must_contain_terms": ["coffman", "prevention", "circular wait"],
+      "is_handwritten_target": true
+    },
+    {
+      "question_id": "MD-02",
+      "question": "How do the concurrency and deadlock topics in the CS301 syllabus review relate to the Coffman conditions in the OS notes?",
+      "category": "multi_document",
+      "style": "conceptual",
+      "expected_status": "grounded",
+      "requires_multiple_documents": true,
+      "expected_documents": ["real_syllabus_review.txt", "real_os_multipage.pdf"],
+      "expected_pages_or_slides": {
+        "real_syllabus_review.txt": "Section 1",
+        "real_os_multipage.pdf": "Page 2"
+      },
+      "must_contain_terms": ["syllabus", "coffman", "deadlock"],
+      "is_handwritten_target": false
+    },
+    {
+      "question_id": "MD-03",
+      "question": "What virtual memory management concepts appear both in the OS chapter notes and the course syllabus exam checklist?",
+      "category": "multi_document",
+      "style": "factual",
+      "expected_status": "grounded",
+      "requires_multiple_documents": true,
+      "expected_documents": ["real_os_multipage.pdf", "real_syllabus_review.txt"],
+      "expected_pages_or_slides": {
+        "real_os_multipage.pdf": "Page 3",
+        "real_syllabus_review.txt": "Section 1"
+      },
+      "must_contain_terms": ["paging", "virtual memory"],
+      "is_handwritten_target": false
+    },
+    {
+      "question_id": "MD-04",
+      "question": "Synthesize how Banker's algorithm is described across the lecture PDF, the handwritten exam rules, and the syllabus checklist.",
+      "category": "multi_document",
+      "style": "comparison",
+      "expected_status": "grounded",
+      "requires_multiple_documents": true,
+      "expected_documents": ["real_os_multipage.pdf", "real_handwritten_note.png"],
+      "expected_pages_or_slides": {
+        "real_os_multipage.pdf": "Page 2",
+        "real_handwritten_note.png": "Page 1"
+      },
+      "must_contain_terms": ["banker", "avoidance", "safe state"],
+      "is_handwritten_target": true
+    },
+    {
+      "question_id": "MD-05",
+      "question": "Contrast the execution states of an operating system process with graph traversal queue and stack structures in BFS and DFS.",
+      "category": "multi_document",
+      "style": "comparison",
+      "expected_status": "grounded",
+      "requires_multiple_documents": true,
+      "expected_documents": ["real_os_multipage.pdf", "real_graph_slides.pptx"],
+      "expected_pages_or_slides": {
+        "real_os_multipage.pdf": "Page 1",
+        "real_graph_slides.pptx": "Slide 2"
+      },
+      "must_contain_terms": ["process", "queue"],
+      "is_handwritten_target": false
+    },
+    {
+      "question_id": "MD-06",
+      "question": "Which topics from the CS301 syllabus review involve Operating System architectures and Process Management?",
+      "category": "multi_document",
+      "style": "conceptual",
+      "expected_status": "grounded",
+      "requires_multiple_documents": true,
+      "expected_documents": ["real_syllabus_review.txt", "real_os_multipage.pdf"],
+      "expected_pages_or_slides": {
+        "real_syllabus_review.txt": "Section 1",
+        "real_os_multipage.pdf": "Page 1"
+      },
+      "must_contain_terms": ["process", "operating system"],
+      "is_handwritten_target": false
+    },
+    {
+      "question_id": "MD-07",
+      "question": "How do the space complexity trade-offs in the graph slides compare to memory paging fragmentation in the OS notes?",
+      "category": "multi_document",
+      "style": "comparison",
+      "expected_status": "grounded",
+      "requires_multiple_documents": true,
+      "expected_documents": ["real_graph_slides.pptx", "real_os_multipage.pdf"],
+      "expected_pages_or_slides": {
+        "real_graph_slides.pptx": "Slide 2",
+        "real_os_multipage.pdf": "Page 3"
+      },
+      "must_contain_terms": ["space", "memory"],
+      "is_handwritten_target": false
+    },
+    {
+      "question_id": "MD-08",
+      "question": "What concurrency primitives in the syllabus checklist relate to preventing race conditions and deadlocks in process management?",
+      "category": "multi_document",
+      "style": "conceptual",
+      "expected_status": "grounded",
+      "requires_multiple_documents": true,
+      "expected_documents": ["real_syllabus_review.txt", "real_os_multipage.pdf"],
+      "expected_pages_or_slides": {
+        "real_syllabus_review.txt": "Section 1",
+        "real_os_multipage.pdf": "Page 2"
+      },
+      "must_contain_terms": ["concurrency", "process"],
+      "is_handwritten_target": false
+    },
+    {
+      "question_id": "MD-09",
+      "question": "How does dynamic Banker avoidance in the professor's handwritten notes differ from static prevention in the OS lecture chapter?",
+      "category": "multi_document",
+      "style": "comparison",
+      "expected_status": "grounded",
+      "requires_multiple_documents": true,
+      "expected_documents": ["real_handwritten_note.png", "real_os_multipage.pdf"],
+      "expected_pages_or_slides": {
+        "real_handwritten_note.png": "Page 1",
+        "real_os_multipage.pdf": "Page 2"
+      },
+      "must_contain_terms": ["avoidance", "prevention"],
+      "is_handwritten_target": true
+    },
+    {
+      "question_id": "MD-10",
+      "question": "Provide an overview of all memory and virtualization topics covered between the syllabus checklist and Chapter 4 of the OS notes.",
+      "category": "multi_document",
+      "style": "paraphrased",
+      "expected_status": "grounded",
+      "requires_multiple_documents": true,
+      "expected_documents": ["real_syllabus_review.txt", "real_os_multipage.pdf"],
+      "expected_pages_or_slides": {
+        "real_syllabus_review.txt": "Section 1",
+        "real_os_multipage.pdf": "Page 3"
+      },
+      "must_contain_terms": ["virtual memory", "paging"],
+      "is_handwritten_target": false
+    }
+  ],
+  "not_covered_questions": [
+    {
+      "question_id": "NC-01",
+      "question": "What is the A* search heuristic function and its time complexity?",
+      "category": "not_covered",
+      "expected_status": "not_covered",
+      "rationale": "Plausible AI and search algorithm question, intentionally absent from BFS/DFS slides."
+    },
+    {
+      "question_id": "NC-02",
+      "question": "How does the Paxos consensus algorithm achieve quorum in distributed systems?",
+      "category": "not_covered",
+      "expected_status": "not_covered",
+      "rationale": "Plausible OS/distributed systems topic, absent from local OS notes."
+    },
+    {
+      "question_id": "NC-03",
+      "question": "Explain the TCP three-way handshake and slow-start congestion control mechanism.",
+      "category": "not_covered",
+      "expected_status": "not_covered",
+      "rationale": "Networking syllabus topic, not in uploaded files."
+    },
+    {
+      "question_id": "NC-04",
+      "question": "How do B-Trees maintain logarithmic height during node insertion and split operations?",
+      "category": "not_covered",
+      "expected_status": "not_covered",
+      "rationale": "DBMS storage topic, absent from normalization notes."
+    },
+    {
+      "question_id": "NC-05",
+      "question": "What is the working set model for preventing virtual memory thrashing?",
+      "category": "not_covered",
+      "expected_status": "not_covered",
+      "rationale": "Advanced memory topic, absent from simple paging notes."
+    },
+    {
+      "question_id": "NC-06",
+      "question": "How does Dijkstra's algorithm find the single-source shortest path with non-negative weights?",
+      "category": "not_covered",
+      "expected_status": "not_covered",
+      "rationale": "Graph algorithm topic, absent from BFS/DFS traversal slides."
+    },
+    {
+      "question_id": "NC-07",
+      "question": "Explain the difference between Tuple Relational Calculus and Domain Relational Calculus in DBMS.",
+      "category": "not_covered",
+      "expected_status": "not_covered",
+      "rationale": "Relational calculus topic, absent from normalization markdown."
+    },
+    {
+      "question_id": "NC-08",
+      "question": "What are the stages of the Raft consensus algorithm leader election and log replication?",
+      "category": "not_covered",
+      "expected_status": "not_covered",
+      "rationale": "Distributed consensus topic, absent from syllabus and notes."
+    },
+    {
+      "question_id": "NC-09",
+      "question": "How does the QuickSort randomized pivot selection avoid worst-case O(n^2) running time?",
+      "category": "not_covered",
+      "expected_status": "not_covered",
+      "rationale": "Sorting algorithm topic, absent from course files."
+    },
+    {
+      "question_id": "NC-10",
+      "question": "Explain the MapReduce shuffle and sort phase in large-scale cluster data processing.",
+      "category": "not_covered",
+      "expected_status": "not_covered",
+      "rationale": "Big data architecture topic, absent from syllabus and notes."
+    }
+  ],
+  "multi_turn_conversations": [
+    {
+      "conversation_id": "MT-01",
+      "title": "Graph Traversal Algorithms & Complexity Follow-up",
+      "turns": [
+        {
+          "turn_index": 1,
+          "question": "What is Breadth-First Search BFS?",
+          "expected_status": "grounded",
+          "expected_documents": ["real_graph_slides.pptx"],
+          "must_contain": ["queue", "level"]
+        },
+        {
+          "turn_index": 2,
+          "question": "What data structure does it use?",
+          "expected_status": "grounded",
+          "expected_documents": ["real_graph_slides.pptx"],
+          "must_contain": ["queue", "fifo"]
+        },
+        {
+          "turn_index": 3,
+          "question": "How does it compare to DFS in terms of space complexity?",
+          "expected_status": "grounded",
+          "expected_documents": ["real_graph_slides.pptx"],
+          "must_contain": ["space", "branch"]
+        }
+      ]
+    },
+    {
+      "conversation_id": "MT-02",
+      "title": "Deadlock Conditions to Avoidance Progression",
+      "turns": [
+        {
+          "turn_index": 1,
+          "question": "What are the four Coffman conditions for deadlock?",
+          "expected_status": "grounded",
+          "expected_documents": ["real_os_multipage.pdf"],
+          "must_contain": ["coffman", "mutual exclusion"]
+        },
+        {
+          "turn_index": 2,
+          "question": "How can it be avoided?",
+          "expected_status": "grounded",
+          "expected_documents": ["real_os_multipage.pdf"],
+          "must_contain": ["avoidance", "banker"]
+        },
+        {
+          "turn_index": 3,
+          "question": "What does the professor's handwritten note say about this?",
+          "expected_status": "grounded",
+          "expected_documents": ["real_handwritten_note.png"],
+          "must_contain": ["claim", "advance"]
+        }
+      ]
+    },
+    {
+      "conversation_id": "MT-03",
+      "title": "Relational Database Normalization Hierarchy",
+      "turns": [
+        {
+          "turn_index": 1,
+          "question": "What is Second Normal Form 2NF in relational databases?",
+          "expected_status": "grounded",
+          "expected_documents": ["real_dbms_normalization.md"],
+          "must_contain": ["1nf", "partial functional"]
+        },
+        {
+          "turn_index": 2,
+          "question": "How is it different from Third Normal Form?",
+          "expected_status": "grounded",
+          "expected_documents": ["real_dbms_normalization.md"],
+          "must_contain": ["transitive", "superkey"]
+        }
+      ]
+    }
+  ]
+}

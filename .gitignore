@@ -1,0 +1,30 @@
+# Python & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# Environment variables & secrets
+.env
+*.env
+!.env.example
+
+# Node / Frontend
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Local runtime data
+backend/data/
+backend/uploads/
+backend/scratch/
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

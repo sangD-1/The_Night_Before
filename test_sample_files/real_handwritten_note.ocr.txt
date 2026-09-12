@@ -1,0 +1,4 @@
+Prof. Notes: Deadlock Exam Rule
+1. Prevention: statically break circular wait order.
+2. Avoidance: dynamic Banker safe state test.
+Important: Avoidance requires max claim known in advance.

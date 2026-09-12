@@ -1,0 +1,5 @@
+CS301 Course Syllabus - Exam Checklist
+Section 1: Operating System Architectures (Monolithic vs Microkernel).
+Section 2: Concurrency Primitives (Semaphores, Mutexes, Spinlocks).
+Section 3: Deadlock Coffman Conditions and Banker Safe State Vector Analysis.
+Section 4: Virtual Memory Management (Page Tables, TLB, Page Replacement).

@@ -1,0 +1,14 @@
+Operating Systems — Process Management
+
+A process is a program in execution.
+
+Process states:
+1. New
+2. Ready
+3. Running
+4. Waiting
+5. Terminated
+
+The Process Control Block (PCB) stores information about a process,
+including its process state, program counter, CPU registers and
+scheduling information.
