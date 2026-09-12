@@ -9,10 +9,28 @@ app = FastAPI(
     version="0.4.0",
 )
 
-# Initialize SQLite database tables on application launch
+import logging
+
+logger = logging.getLogger("app.main")
+
+# Initialize SQLite database tables and warm up embedding model on application launch
 @app.on_event("startup")
 def on_startup():
     init_db()
+    # Eagerly initialize and warm up local embedding model and vector store
+    # This guarantees the ~79MB model is downloaded, cached, and loaded in RAM before accepting requests,
+    # preventing in-request downloads, latency spikes, and OOM kills on Render.
+    try:
+        from app.services.retrieval.embedding_service import embedding_service
+        embedding_service.warmup()
+    except Exception as e:
+        logger.error("Embedding model warmup failed at startup: %s", e)
+
+    try:
+        from app.services.retrieval.vector_store import vector_store
+        vector_store.initialize()
+    except Exception as e:
+        logger.error("ChromaDB vector store initialization failed at startup: %s", e)
 
 # Allowed origins for local development
 origins = [

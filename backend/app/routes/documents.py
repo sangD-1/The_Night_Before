@@ -1,6 +1,10 @@
+import logging
 from pathlib import Path
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from fastapi.responses import FileResponse
+from starlette.concurrency import run_in_threadpool
+
+from app.database import get_db
 from app.models.document import (
     DocumentResponse,
     DocumentListResponse,
@@ -12,6 +16,8 @@ from app.services.document_service import DocumentService, UPLOADS_DIR
 from app.services.processor import document_processor
 from app.services.retrieval import vector_store
 
+logger = logging.getLogger("routes.documents")
+
 router = APIRouter(prefix="/api/documents", tags=["documents"])
 
 @router.post("/upload", response_model=DocumentResponse, status_code=201)
@@ -20,27 +26,53 @@ async def upload_document(file: UploadFile = File(...)):
     Upload a course material document (PDF, PPT, PPTX, MD, TXT, JPG, PNG).
     Validates file extension, size, and safely stores the file locally.
     Auto-triggers structured extraction and vector indexing.
+    Runs CPU/IO-bound processing in worker threads to prevent event loop blocking.
     """
     if not file.filename:
         raise HTTPException(status_code=400, detail="Missing filename in upload.")
 
     saved_doc = await DocumentService.process_and_save_upload(file)
 
-    # Trigger automatic extraction and indexing pipeline
+    # Trigger automatic extraction and indexing pipeline asynchronously in threadpool
     try:
-        document_processor.process_document(saved_doc["id"])
+        await run_in_threadpool(document_processor.process_document, saved_doc["id"])
         try:
-            vector_store.index_document(saved_doc["id"])
-        except Exception:
-            pass  # Indexing can also be done manually if needed
+            await run_in_threadpool(vector_store.index_document, saved_doc["id"])
+        except Exception as idx_err:
+            logger.error(
+                "Indexing failed for document '%s' (ID: %s): %s",
+                saved_doc["original_filename"],
+                saved_doc["id"],
+                idx_err,
+                exc_info=True,
+            )
+            with get_db() as conn:
+                cursor = conn.cursor()
+                cursor.execute(
+                    """
+                    UPDATE documents
+                    SET processing_status = 'indexing_failed',
+                        upload_status = 'indexing_failed'
+                    WHERE id = ?
+                    """,
+                    (saved_doc["id"],),
+                )
 
         # Fetch updated document status
         updated = DocumentService.get_document(saved_doc["id"])
         if updated:
             return updated
     except Exception as e:
-        # Document remains uploaded even if extraction encountered an issue
-        pass
+        logger.error(
+            "Document processing failed for '%s' (ID: %s): %s",
+            saved_doc["original_filename"],
+            saved_doc["id"],
+            e,
+            exc_info=True,
+        )
+        updated = DocumentService.get_document(saved_doc["id"])
+        if updated:
+            return updated
 
     return saved_doc
 

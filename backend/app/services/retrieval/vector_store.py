@@ -44,6 +44,15 @@ class VectorStoreService:
             )
         return self._collection
 
+    def initialize(self) -> None:
+        """Eagerly connect to persistent ChromaDB and ensure the collection is initialized."""
+        _ = self.collection
+        logger.info(
+            "ChromaDB vector store initialized (collection: '%s', vectors: %d)",
+            CHROMA_COLLECTION_NAME,
+            self.collection.count(),
+        )
+
     def index_document(self, document_id: str) -> Dict[str, Any]:
         """
         Extracts sections for the document, chunks them respecting page/slide boundaries,
@@ -81,12 +90,20 @@ class VectorStoreService:
         texts = [chunk.text for chunk in chunks]
         metadatas = [chunk.to_metadata() for chunk in chunks]
 
-        # 5. Insert into Chroma collection (Chroma will embed via collection's embedding_function)
-        self.collection.add(
-            ids=ids,
-            documents=texts,
-            metadatas=metadatas,
-        )
+        # 5. Insert into Chroma collection in bounded batches to conserve memory
+        BATCH_SIZE = 32
+        for i in range(0, len(chunks), BATCH_SIZE):
+            batch_ids = ids[i : i + BATCH_SIZE]
+            batch_texts = texts[i : i + BATCH_SIZE]
+            batch_metas = metadatas[i : i + BATCH_SIZE]
+            self.collection.add(
+                ids=batch_ids,
+                documents=batch_texts,
+                metadatas=batch_metas,
+            )
+
+        import gc
+        gc.collect()
 
         # 6. Update document status in SQLite
         with get_db() as conn:
