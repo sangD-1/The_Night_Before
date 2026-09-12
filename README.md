@@ -134,15 +134,32 @@ Grounded Answer + Verified Interactive Citations + Session Memory Update
 
 ## 🚀 Running the Project Locally
 
+### Prerequisites
+
+Make sure the following are installed:
+
+- Python 3.13+
+- Node.js 18+
+- npm
+- Git
+
+The project uses a Python virtual environment located at `backend/.venv`.
+
 ### 1. Backend (FastAPI)
 Open a terminal in `Desktop/The_Night_Before/backend`:
 
 ```powershell
+cd Desktop/The_Night_Before/backend
+
 # Activate the virtual environment
 .\.venv\Scripts\Activate.ps1
 
-# Start the FastAPI development server
+# Start the FastAPI backend
 uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+
+> **Windows PowerShell:** If PowerShell blocks virtual-environment activation, the backend can also be started directly with:
+>
+> `.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8000`
 ```
 - **Backend URL:** [http://127.0.0.1:8000](http://127.0.0.1:8000)
 - **Interactive Swagger Docs:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
@@ -163,6 +180,103 @@ npm run dev
 - **Frontend URL:** [http://localhost:5173](http://localhost:5173)
 
 ---
+
+### 3. Using the Application Locally
+
+Once both servers are running:
+
+1. Open `http://localhost:5173` in your browser.
+2. Upload course materials such as:
+   - PDF
+   - PPTX
+   - Markdown (`.md`)
+   - Plain text (`.txt`)
+   - PNG/JPG/JPEG scanned or handwritten notes
+3. Wait for the material to finish processing and indexing.
+4. Ask a question based on the uploaded course material.
+5. The assistant returns a grounded answer with source citations.
+6. Use **View Source** to open the original source at the cited page/slide where supported.
+7. Ask follow-up questions to test conversational context.
+8. Ask something that is intentionally absent from the uploaded material to verify the **Not Covered** refusal behavior.
+
+### Recommended Local Testing
+
+The local version is recommended for full development and testing because it has access to the machine's available RAM and local persistent storage.
+
+For the competition/demo, the local application can be used when testing larger or more complex course documents.
+
+---
+
+## 🌐 Live Deployment
+
+The project is deployed using a separate frontend and backend architecture:
+
+- **Frontend:** Vercel
+- **Backend:** Render
+- **Source Code:** GitHub
+
+### Live Application
+
+**Frontend:**  
+https://the-night-before.vercel.app
+
+**Backend:**  
+https://the-night-before.onrender.com
+
+**Backend API Documentation:**  
+https://the-night-before.onrender.com/docs
+
+**Backend Health Check:**  
+https://the-night-before.onrender.com/api/health
+
+### Deployment Architecture
+
+```text
+                    GitHub Repository
+                           |
+              +------------+------------+
+              |                         |
+              ↓                         ↓
+        Vercel Frontend           Render Backend
+        React + Vite              FastAPI + Uvicorn
+              |                         |
+              +---------- API ----------+
+                           |
+                    RAG Processing
+                           |
+              +------------+------------+
+              |            |            |
+              ↓            ↓            ↓
+           ChromaDB      SQLite       OCR
+          + Embeddings   Metadata    Processing
+
+```markdown
+### ⚠️ Known Production Limitation — Render Free Tier
+
+The current live backend is hosted on the Render Free tier.
+
+The Render Free instance provides **512 MB RAM**. The application's document-ingestion pipeline is memory-intensive because it performs several operations during upload and indexing:
+
+- PDF/PPTX document extraction
+- Page/slide-aware chunking
+- Local `all-MiniLM-L6-v2` ONNX embedding generation
+- ChromaDB vector indexing
+- OCR processing for scanned/handwritten notes
+
+As a result, larger or more complex documents may temporarily exceed the available 512 MB memory during processing. When this happens, Render may terminate and restart the backend instance due to an out-of-memory condition.
+
+**This limitation is related to available server memory, not simply the file's size in KB.** A small file can still require significant memory depending on its number of pages/slides, embedded content, and processing complexity.
+
+### Recommended Usage for the Live Demo
+
+For the currently deployed Render Free backend:
+
+- Prefer smaller and moderately sized course documents.
+- Avoid uploading very large PDFs or PPTX files during the live demo.
+- Simple PDFs, PPTX files, Markdown/TXT files, and small scanned notes are recommended.
+- If a complex document fails to process on the live deployment, use the local version for full testing.
+
+The application's complete RAG functionality can be run locally without the Render Free tier's 512 MB memory constraint.
 
 ## 🧪 Benchmark & Verification Suites
 
