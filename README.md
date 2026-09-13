@@ -250,7 +250,9 @@ https://the-night-before.onrender.com/api/health
            ChromaDB      SQLite       OCR
           + Embeddings   Metadata    Processing
 
-```markdown
+
+
+
 ### ⚠️ Known Production Limitation — Render Free Tier
 
 The current live backend is hosted on the Render Free tier.
